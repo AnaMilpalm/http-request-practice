@@ -1,16 +1,16 @@
-const Articles = ({articles}) => {
+const Articles = ({ articles}) => {
     return (
         <div>
-            <ul>
-                {articles.map(post =>
-                 <li key={post.objecID}>
-                    <a href={post.url}>{post.title}</a>
-                 </li>
-                )}
-            </ul>
-
+         <ul>
+            {articles.map(post => (
+                
+                <li key={post.objectID}>
+                    <a href={post.url} target="_blank">{post.title}</a>
+                </li>
+            ))}
+         </ul>
     </div>
-    )
+    );
 };
 
 export default Articles;
