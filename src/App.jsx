@@ -11,34 +11,43 @@ const App = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [isError, setIsError] = useState(false);
   const [query, setQuery] = useState('react');
+  const [page, setPage] = useState(0);
+  
+
   useEffect(() => {
-    if(!query) return;
+
     const getData = async () => {
       try {
         setIsError(false);
         setIsLoader(true);
-        const {hits} = await fetchArticles(query);
-        setArticles(hits);
+        const {hits} = await fetchArticles(query, page);
+        setArticles(prev => (page === 0 ? hits : [...prev, ...hits]));
       } catch (error) {
         console.error(error);
         setIsError(true);
       } finally {
-        setIsLoader(false);
+        setIsLoader(false); 
       }
     };
 
-    getData();
-  }, [query]);
+      getData();   
+  }, [query, page]);
 
     const handleChangeQuery = query => {
+      setArticles([]);
       setQuery(query);
+      setPage(0);
+
+
     }
       return (
     <div>
+      <p>Current page: {page}</p>
       <SearchBar onChangeQuery={handleChangeQuery} />
   {isLoader && <Loader />}
   <Articles articles={articles}/>
   {isError && <h2>Щось сталось! Онови сторінку...</h2>}
+  <button onClick={() => setPage(prev => prev + 1)}>Load more</button>
     </div>
   )
 }
