@@ -12,6 +12,7 @@ const App = () => {
   const [isError, setIsError] = useState(false);
   const [query, setQuery] = useState('react');
   const [page, setPage] = useState(0);
+  const [nbPages, setNbPages] = useState(0);
   
 
   useEffect(() => {
@@ -20,8 +21,10 @@ const App = () => {
       try {
         setIsError(false);
         setIsLoader(true);
-        const {hits} = await fetchArticles(query, page);
+        const {hits, nbPages} = await fetchArticles(query, page);
+        setNbPages(nbPages);
         setArticles(prev => (page === 0 ? hits : [...prev, ...hits]));
+        
       } catch (error) {
         console.error(error);
         setIsError(true);
@@ -45,9 +48,9 @@ const App = () => {
       <p>Current page: {page}</p>
       <SearchBar onChangeQuery={handleChangeQuery} />
   {isLoader && <Loader />}
+  {nbPages > page && <button onClick={() => setPage(prev => prev + 1)}>Load more</button>}
   <Articles articles={articles}/>
   {isError && <h2>Щось сталось! Онови сторінку...</h2>}
-  <button onClick={() => setPage(prev => prev + 1)}>Load more</button>
     </div>
   )
 }
