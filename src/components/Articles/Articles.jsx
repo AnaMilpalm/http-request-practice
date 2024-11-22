@@ -5,7 +5,7 @@ const Articles = ({ articles}) => {
             {articles.map(post => (
                 
                 <li key={post.objectID}>
-                    <a href={post.url} target="_blank">{post.title}</a>
+                    <a href={post.url} target="_blank">{post.title || post.story_title}</a>
                 </li>
             ))}
          </ul>

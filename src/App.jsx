@@ -4,7 +4,7 @@ import Articles from './components/Articles/Articles';
 import { fetchArticles } from './services/api';
 import Loader from './components/Loader/Loader';
 import SearchBar from './components/SearchBar/SearchBar';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
   const [articles, setArticles] = useState([]);
@@ -13,6 +13,12 @@ const App = () => {
   const [query, setQuery] = useState('react');
   const [page, setPage] = useState(0);
   const [nbPages, setNbPages] = useState(0);
+
+  useEffect(() => {
+    if (page > 0 && page === nbPages) {
+      toast('You have already seen all posts!');
+    }
+  },[page, nbPages]) ;
   
 
   useEffect(() => {
@@ -27,6 +33,7 @@ const App = () => {
         
       } catch (error) {
         console.error(error);
+        toast.error('Ooops ... Something does not work!' );
         setIsError(true);
       } finally {
         setIsLoader(false); 
@@ -49,6 +56,7 @@ const App = () => {
       <SearchBar onChangeQuery={handleChangeQuery} />
   {isLoader && <Loader />}
   {nbPages > page && <button onClick={() => setPage(prev => prev + 1)}>Load more</button>}
+  <Toaster toastOptions={{style:{backgroundColor:'#363636', color: '#fff'}}} />
   <Articles articles={articles}/>
   {isError && <h2>Щось сталось! Онови сторінку...</h2>}
     </div>
